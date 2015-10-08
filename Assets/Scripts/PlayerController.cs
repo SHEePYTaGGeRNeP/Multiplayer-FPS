@@ -8,6 +8,9 @@ namespace Assets.Scripts
         [SerializeField]
         private float _speed = 5f;
 
+        [SerializeField]
+        private float _mouseSensitivity = 3f;
+
         private PlayerMotor _motor;
 
         void Start()
@@ -27,7 +30,18 @@ namespace Assets.Scripts
             Vector3 velocity = (moveHorizontal + moveVertical).normalized * this._speed * Time.deltaTime;
 
             this._motor.Move(velocity);
-            
+
+            // Only for turning - Rotating around X is for camera
+            float yrot = Input.GetAxisRaw("Mouse X");
+            Vector3 rotation = new Vector3(0, yrot, 0) * this._mouseSensitivity;
+
+            this._motor.Rotate(rotation);
+
+            // Calculate camera rotation as a 3D vector
+            float xrot = Input.GetAxisRaw("Mouse Y");
+            Vector3 cameraRotation = new Vector3(xrot, 0, 0) * this._mouseSensitivity;
+
+            this._motor.RotateCamera(cameraRotation);
         }
     }
 }
