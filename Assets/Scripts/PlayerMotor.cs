@@ -10,7 +10,12 @@ namespace Assets.Scripts
 
         private Vector3 _velocity = Vector3.zero;
         private Vector3 _rotation = Vector3.zero;
-        private Vector3 _cameraRotation = Vector3.zero;
+        private float _cameraRotationX = 0f;
+        private float _currentCameraRotationX = 0f;
+        private Vector3 _thrusterForce = Vector3.zero;
+
+        [SerializeField]
+        private float _cameraRotationLimit = 85f;
 
         private Rigidbody rb;
 
@@ -27,10 +32,15 @@ namespace Assets.Scripts
         {
             this._rotation = rotation;
         }
-        public void RotateCamera(Vector3 cameraRotation)
+        public void RotateCamera(float cameraRotationX)
         {
-            this._cameraRotation = cameraRotation;
+            this._cameraRotationX = cameraRotationX;
         }
+        public void ApplyThruster(Vector3 thrusterForce)
+        {
+            this._thrusterForce = thrusterForce;
+        }
+
 
         void FixedUpdate()
         {
@@ -45,16 +55,22 @@ namespace Assets.Scripts
             {
                 this.rb.MovePosition(this.transform.position + this._velocity * Time.fixedDeltaTime);
             }
+
+            if (this._thrusterForce != Vector3.zero)
+            {
+                this.rb.AddForce(this._thrusterForce * Time.fixedDeltaTime, ForceMode.Acceleration);
+            }
         }
 
         private void PerformRotation()
         {
             this.rb.MoveRotation(this.rb.rotation * Quaternion.Euler(this._rotation));
-            if (this._camera != null)
-                this._camera.transform.Rotate(-this._cameraRotation);
+            if (this._camera == null) return;
+            this._currentCameraRotationX -= this._cameraRotationX;
+            this._currentCameraRotationX = Mathf.Clamp(this._currentCameraRotationX, -this._cameraRotationLimit, this._cameraRotationLimit);
+
+            this._camera.transform.localEulerAngles = new Vector3(this._currentCameraRotationX, 0f, 0f);
         }
-
-
 
     }
 }

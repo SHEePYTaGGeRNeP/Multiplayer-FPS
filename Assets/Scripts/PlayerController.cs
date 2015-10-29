@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts
 {
-    [RequireComponent(typeof(PlayerMotor))]
+    [RequireComponent(typeof(PlayerMotor), typeof(ConfigurableJoint))]
     public class PlayerController : MonoBehaviour
     {
         [SerializeField]
@@ -11,11 +11,27 @@ namespace Assets.Scripts
         [SerializeField]
         private float _mouseSensitivity = 3f;
 
+        [SerializeField]
+        private float _thrusterForce = 1000f;
+
+        // Header in the Unity inspector
+        [Header("Joint options:")]
+        [SerializeField]
+        private JointDriveMode _jointMode = JointDriveMode.Position;
+        [SerializeField]
+        private float _jointSpring = 20f;
+        [SerializeField]
+        private float _jointMaxForce = 40f;
+
         private PlayerMotor _motor;
+        private ConfigurableJoint _joint;
 
         void Start()
         {
             this._motor = this.GetComponent<PlayerMotor>();
+            this._joint = this.GetComponent<ConfigurableJoint>();
+
+            this.SetJointSettings(this._jointSpring);
         }
 
         void Update()
@@ -39,9 +55,29 @@ namespace Assets.Scripts
 
             // Calculate camera rotation as a 3D vector
             float xrot = Input.GetAxisRaw("Mouse Y");
-            Vector3 cameraRotation = new Vector3(xrot, 0, 0) * this._mouseSensitivity;
+            float cameraRotationX = xrot * this._mouseSensitivity;
 
-            this._motor.RotateCamera(cameraRotation);
+            this._motor.RotateCamera(cameraRotationX);
+
+
+            Vector3 thrusterForce = Vector3.zero;
+            if (Input.GetButton("Jump"))
+            {
+                thrusterForce = Vector3.up * this._thrusterForce;
+                this.SetJointSettings(0f);
+            }
+            else
+                this.SetJointSettings(this._jointSpring);
+
+            // Apply thuster force
+            this._motor.ApplyThruster(thrusterForce);
+        }
+
+        private void SetJointSettings(float jointSpring)
+        {
+            this._joint.yDrive = new JointDrive { mode = this._jointMode, positionSpring = jointSpring, maximumForce = this._jointMaxForce };
+
+
         }
     }
 }
