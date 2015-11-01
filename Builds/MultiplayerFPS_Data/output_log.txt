@@ -1,4 +1,4 @@
-Initialize engine version: 5.2.0f3 (e7947df39b5c)
+Initialize engine version: 5.2.1f1 (44735ea161b3)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
@@ -17,11 +17,21 @@ Loading E:\GITHUB\Multiplayer FPS\Builds\MultiplayerFPS_Data\Managed\UnityEngine
 Platform assembly: E:\GITHUB\Multiplayer FPS\Builds\MultiplayerFPS_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading E:\GITHUB\Multiplayer FPS\Builds\MultiplayerFPS_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: E:\GITHUB\Multiplayer FPS\Builds\MultiplayerFPS_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.040 seconds
+- Completed reload, in  0.039 seconds
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x2160 at -1920,-1080
 <RI> Initialized touch support.
 Platform assembly: E:\GITHUB\Multiplayer FPS\Builds\MultiplayerFPS_Data\Managed\System.dll (this message is harmless)
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 35f4 -> priority: 1 
+  Thread -> id: 42f8 -> priority: 1 
+NullReferenceException: Object reference not set to an instance of an object
+  at Assets.Scripts.PlayerSetup.Start () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at Assets.Scripts.PlayerSetup.Start () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
