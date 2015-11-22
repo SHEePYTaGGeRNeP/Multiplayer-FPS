@@ -43,14 +43,17 @@
             if (Physics.Raycast(this._cam.transform.position, this._cam.transform.forward, out hit, this.Weapon.Range, this._raycastLayerMask ))
             {
                 if (hit.collider.tag == _PLAYER_TAG)
-                    this.CmdPlayerShot(hit.collider.name);
+                    this.CmdPlayerShot(hit.collider.name, this.Weapon.Damage);
             }
         }
 
         [Command]
-        private void CmdPlayerShot(string id)
+        private void CmdPlayerShot(string playerID, int damage)
         {
-            Debug.Log(id + " has been shot.");
+            Debug.Log(playerID + " has been shot.");
+
+            Player player = GameManager.GetPlayer(playerID);
+            player.TakeDamage(damage);
         }
 
     }

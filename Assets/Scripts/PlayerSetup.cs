@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(Player))]
     public class PlayerSetup : NetworkBehaviour
     {
         [SerializeField]
@@ -24,15 +25,19 @@ namespace Assets.Scripts
             {
                 this._sceneCamera = Camera.main;
                 if (this._sceneCamera != null) this._sceneCamera.gameObject.SetActive(false);
-                Camera.main.gameObject.SetActive(false);
+                if (Camera.main != null)
+                    Camera.main.gameObject.SetActive(false);
             }
-            this.RegisterPlayer();
         }
 
-        private void RegisterPlayer()
+        public override void OnStartClient()
         {
-            string id = "Player " + this.GetComponent<NetworkIdentity>().netId;
-            this.transform.name = id;
+            base.OnStartClient();
+
+            string netIDParam = this.GetComponent<NetworkIdentity>().netId.ToString();
+            Player player = this.GetComponent<Player>();
+
+            GameManager.RegisterPlayer(netIDParam, player);
         }
 
         private void AssignRemoteLayer()
@@ -49,6 +54,7 @@ namespace Assets.Scripts
         {
             if (this._sceneCamera != null)
                 this._sceneCamera.gameObject.SetActive(true);
+            GameManager.UnRegisterPlayer(this.transform.name);
         }
     }
 }
