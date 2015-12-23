@@ -47,13 +47,14 @@
             }
         }
 
+        // only called on the server
         [Command]
         private void CmdPlayerShot(string playerID, int damage)
         {
             Debug.Log(playerID + " has been shot.");
 
             Player player = GameManager.GetPlayer(playerID);
-            player.TakeDamage(damage);
+            player.RpcTakeDamage(damage);
         }
 
     }

@@ -6,6 +6,22 @@
 
     public class GameManager : MonoBehaviour
     {
+
+        public static GameManager Instance;
+
+        public MatchSettings MatchSettings;
+
+
+        void Awake()
+        {
+            if (Instance != null)
+                Debug.LogError("More than one GameManager in scene.");
+            else
+                Instance = this;
+        }
+
+        #region Player tracking
+
         private const string PLAYER_ID_PREFIX = "Player ";
 
         private static Dictionary<string, Player> _players = new Dictionary<string, Player>();
@@ -41,5 +57,10 @@
         //    GUILayout.EndVertical();
         //    GUILayout.EndArea();
         //}
+
+
+        #endregion
+
+
     }
 }

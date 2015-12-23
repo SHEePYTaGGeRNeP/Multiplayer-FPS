@@ -28,7 +28,10 @@ namespace Assets.Scripts
                 if (Camera.main != null)
                     Camera.main.gameObject.SetActive(false);
             }
+
+            this.GetComponent<Player>().Setup();
         }
+
 
         public override void OnStartClient()
         {
