@@ -2,6 +2,7 @@
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerMotor), typeof(ConfigurableJoint))]
     public class PlayerController : MonoBehaviour
     {
@@ -14,6 +15,8 @@ namespace Assets.Scripts
         [SerializeField]
         private float _thrusterForce = 1000f;
 
+        
+
         // Header in the Unity inspector
         [Header("Joint options:")]
         [SerializeField]
@@ -23,27 +26,32 @@ namespace Assets.Scripts
         [SerializeField]
         private float _jointMaxForce = 40f;
 
+        // component caching
         private PlayerMotor _motor;
         private ConfigurableJoint _joint;
+        private Animator _animator;
 
         void Start()
         {
             this._motor = this.GetComponent<PlayerMotor>();
             this._joint = this.GetComponent<ConfigurableJoint>();
-
+            this._animator = this.GetComponent<Animator>();
             this.SetJointSettings(this._jointSpring);
         }
 
         void Update()
         {
             // calculate movement velocity as a 3D vector.
-            float xMove = Input.GetAxisRaw("Horizontal");
-            float zMove = Input.GetAxisRaw("Vertical");
+            float xMove = Input.GetAxis("Horizontal");
+            float zMove = Input.GetAxis("Vertical");
 
             Vector3 moveHorizontal = this.transform.right * xMove;
             Vector3 moveVertical = this.transform.forward * zMove;
 
-            Vector3 velocity = (moveHorizontal + moveVertical).normalized * this._speed * Time.deltaTime;
+            Vector3 velocity = (moveHorizontal + moveVertical) * this._speed * Time.deltaTime;
+
+            // Animate movement
+            this._animator.SetFloat("ForwardVelocity", zMove);
 
             this._motor.Move(velocity);
 
