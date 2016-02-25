@@ -20,8 +20,6 @@ namespace Assets.Scripts
         // Header in the Unity inspector
         [Header("Joint options:")]
         [SerializeField]
-        private JointDriveMode _jointMode = JointDriveMode.Position;
-        [SerializeField]
         private float _jointSpring = 20f;
         [SerializeField]
         private float _jointMaxForce = 40f;
@@ -83,7 +81,7 @@ namespace Assets.Scripts
 
         private void SetJointSettings(float jointSpring)
         {
-            this._joint.yDrive = new JointDrive { mode = this._jointMode, positionSpring = jointSpring, maximumForce = this._jointMaxForce };
+            this._joint.yDrive = new JointDrive { positionSpring = jointSpring, maximumForce = this._jointMaxForce };
 
 
         }
