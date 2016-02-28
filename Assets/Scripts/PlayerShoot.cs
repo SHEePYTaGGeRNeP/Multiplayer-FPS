@@ -11,8 +11,12 @@
     {
         private const string _PLAYER_TAG = "Player";
 
-        public PlayerWeapon Weapon;
-
+        [SerializeField]
+        private PlayerWeapon _weapon;
+        [SerializeField]
+        private GameObject _weaponGFX;
+        [SerializeField]
+        private string _weaponLayerName = "Weapon";
         [SerializeField]
         private LayerMask _raycastLayerMask;
 
@@ -26,6 +30,8 @@
                 Debug.LogError("No camera referenced on PlayerShoot");
                 this.enabled = false;
             }
+
+            this._weaponGFX.layer = LayerMask.NameToLayer(this._weaponLayerName);
         }
 
         void Update()
@@ -40,10 +46,10 @@
         private void Shoot()
         {
             RaycastHit hit;
-            if (Physics.Raycast(this._cam.transform.position, this._cam.transform.forward, out hit, this.Weapon.Range, this._raycastLayerMask ))
+            if (Physics.Raycast(this._cam.transform.position, this._cam.transform.forward, out hit, this._weapon.Range, this._raycastLayerMask ))
             {
                 if (hit.collider.tag == _PLAYER_TAG)
-                    this.CmdPlayerShot(hit.collider.name, this.Weapon.Damage);
+                    this.CmdPlayerShot(hit.collider.name, this._weapon.Damage);
             }
         }
 
